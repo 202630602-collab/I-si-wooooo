@@ -1,0 +1,970 @@
+html_code = """<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나이스한 변명 - 센스있는 대처의 시작</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-hover: #5B4BC4;
+            --secondary: #A29BFE;
+            --accent: #FF7675;
+            --bg-main: #F8F9FD;
+            --card-bg: #FFFFFF;
+            --text-title: #2D3436;
+            --text-body: #636E72;
+            --text-muted: #B2BEC3;
+            --kakao-bg: #BACEE0;
+            --kakao-yellow: #FEE500;
+            --shadow-sm: 0 2px 8px rgba(108, 92, 231, 0.06);
+            --shadow-md: 0 8px 24px rgba(108, 92, 231, 0.12);
+            --shadow-lg: 0 16px 32px rgba(108, 92, 231, 0.18);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-title);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+        }
+
+        .header-badge {
+            background: #FFEAA7;
+            color: #D63031;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Container */
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: var(--text-title);
+            word-break: keep-all;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), #8E44AD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-body);
+            word-break: keep-all;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Form Card Layout */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-title);
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .badge-optional {
+            background: #E4E7EB;
+            color: #636E72;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .badge-required {
+            background: #FFE3E3;
+            color: var(--accent);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Input Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-title);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #E2E8F0;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            outline: none;
+            background-color: #F8FAFC;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        /* Custom File Upload Box */
+        .file-upload-area {
+            border: 2px dashed #CBD5E1;
+            border-radius: var(--radius-md);
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #F8FAFC;
+            position: relative;
+        }
+
+        .file-upload-area:hover, .file-upload-area.dragover {
+            border-color: var(--primary);
+            background: #F1F0FE;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .file-upload-text {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            line-height: 1.4;
+        }
+
+        .file-upload-text strong {
+            color: var(--primary);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-preview {
+            display: none;
+            margin-top: 12px;
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            max-height: 180px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .file-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-file {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* Category Chips */
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #EDF2F7;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-body);
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .chip:hover {
+            background: #E2E8F0;
+        }
+
+        .chip.active {
+            background: #F1F0FE;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Action Section */
+        .action-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary), #8E44AD);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 18px 48px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 420px;
+            justify-content: center;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--primary-hover), #7D3C98);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Loading Spinner Area */
+        .loading-area {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #E2E8F0;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-weight: 600;
+            color: var(--text-title);
+            font-size: 1.05rem;
+        }
+
+        .loading-subtext {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Results Section */
+        .result-section {
+            display: none;
+            flex-direction: column;
+            gap: 24px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-title);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header-title .reset-btn {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-body);
+            background: #EDF2F7;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .section-header-title .reset-btn:hover {
+            background: #E2E8F0;
+        }
+
+        /* Kakao Simulator Box */
+        .kakao-card {
+            background-color: var(--kakao-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .kakao-header {
+            font-size: 0.85rem;
+            color: #424242;
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .chat-bubble-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Recommendation Cards Grid */
+        .recommendations-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rec-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .rec-card:hover {
+            border-color: var(--secondary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .rec-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tag-polite { background: #E3F2FD; color: #1976D2; }
+        .tag-humor { background: #FFF3E0; color: #E65100; }
+        .tag-empathy { background: #F3E5F5; color: #7B1FA2; }
+
+        .rec-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-title);
+            margin-bottom: 16px;
+            white-space: pre-line;
+            font-weight: 500;
+        }
+
+        .rec-explanation {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            background: #F8FAFC;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 14px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .rec-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn-copy {
+            background: #F1F5F9;
+            color: var(--text-title);
+            border: none;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-copy.copied {
+            background: #10B981;
+            color: white;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #2D3436;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            width: 100%;
+            padding: 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            background: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-shield-cat"></i></div>
+            <span>나이스한 변명</span>
+        </a>
+        <div class="header-badge">
+            <i class="fa-solid fa-bolt"></i> AI 센스 엔진 가동중
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">갑작스러운 약속 취소 & 실수,<br><span>가장 나이스한 변명</span>을 찾아드립니다</h1>
+            <p class="hero-subtitle">상대방의 기분은 상하지 않게, 내 체면은 매끄럽게 유지하는 맞춤형 변명 솔루션. 상황만 입력하고 센스 넘치는 답변을 추천받으세요!</p>
+        </section>
+
+        <!-- Input Section -->
+        <section id="input-section" class="grid-layout">
+            
+            <!-- Left Card: Context & Situation -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-pen-to-square"></i> 상황 설명
+                    </div>
+                    <span class="badge-required">필수 입력</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">누구와의 상황인가요?</label>
+                    <div class="chip-group" id="target-chips">
+                        <div class="chip active" data-value="친구">친구/지인</div>
+                        <div class="chip" data-value="직장상사">직장 상사/동료</div>
+                        <div class="chip" data-value="연인">연인/소개팅 상대</div>
+                        <div class="chip" data-value="거래처">거래처/고객</div>
+                        <div class="chip" data-value="기타">기타</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="situation-text">어떤 곤란한 상황인가요?</label>
+                    <textarea id="situation-text" class="form-control" placeholder="예: 오늘 저녁 친구들과 약속이 있는데 너무 피곤해서 도저히 못 나갈 것 같아요. 기분 안 상하게 취소하고 싶어요."></textarea>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">원하는 변명의 톤앤매너</label>
+                    <div class="chip-group" id="tone-chips">
+                        <div class="chip active" data-value="정중함">진중하고 정중함</div>
+                        <div class="chip" data-value="위트">재치와 유머러스</div>
+                        <div class="chip" data-value="공감유도">불쌍함 & 공감유도</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Card: Kakao Upload (Optional) -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-comment-dots"></i> 카카오톡 대화 캡처
+                    </div>
+                    <span class="badge-optional">선택 사항</span>
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--text-body); margin-bottom: 16px;">
+                    상대방과 주고받은 카톡 캡처 이미지를 올려주시면 대화 맥락을 파악해 훨씬 더 정확한 대처법을 분석해 드립니다.
+                </p>
+
+                <div class="file-upload-area" id="upload-area">
+                    <div class="file-upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <div class="file-upload-text">
+                        <strong>클릭하여 이미지 업로드</strong> 또는 파일을 이 영역으로 드래그하세요<br>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">(PNG, JPG, JPEG 지원)</span>
+                    </div>
+                    <input type="file" id="file-input" accept="image/*">
+                </div>
+
+                <div class="file-preview" id="file-preview">
+                    <img src="" id="preview-img" alt="카톡 캡처 이미지 미리보기">
+                    <button class="remove-file" id="remove-file-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Main Submit Action Button -->
+        <div class="action-container" id="action-container">
+            <button class="btn-submit" id="submit-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 나이스한 변명 추천받기
+            </button>
+        </div>
+
+        <!-- Loading View -->
+        <div class="loading-area" id="loading-area">
+            <div class="spinner"></div>
+            <div class="loading-text">상대방의 심리를 고려해 '나이스한 변명'을 생성 중입니다...</div>
+            <div class="loading-subtext">잠시만 기다려주세요 (AI 센스 가동 중)</div>
+        </div>
+
+        <!-- Result Section -->
+        <section class="result-section" id="result-section">
+            <div class="section-header-title">
+                <span><i class="fa-solid fa-lightbulb" style="color: #F1C40F;"></i> 맞춤 추천 변명 리스트</span>
+                <button class="reset-btn" id="reset-btn"><i class="fa-solid fa-rotate-left"></i> 다시 작성하기</button>
+            </div>
+
+            <!-- Recommendations Grid -->
+            <div class="recommendations-grid" id="recommendations-grid">
+                <!-- Recommendations will be dynamically inserted here via JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" style="color: #2ECC71;"></i>
+        <span id="toast-message">클립보드에 복사되었습니다!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 나이스한 변명 (Nice Excuse) — 센스있는 난관 극복을 위한 AI 가이드</p>
+    </footer>
+
+    <!-- JavaScript Interaction Code -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Elements
+            const targetChips = document.querySelectorAll('#target-chips .chip');
+            const toneChips = document.querySelectorAll('#tone-chips .chip');
+            const uploadArea = document.getElementById('upload-area');
+            const fileInput = document.getElementById('file-input');
+            const filePreview = document.getElementById('file-preview');
+            const previewImg = document.getElementById('preview-img');
+            const removeFileBtn = document.getElementById('remove-file-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const situationText = document.getElementById('situation-text');
+            const loadingArea = document.getElementById('loading-area');
+            const resultSection = document.getElementById('result-section');
+            const inputSection = document.getElementById('input-section');
+            const actionContainer = document.getElementById('action-container');
+            const recommendationsGrid = document.getElementById('recommendations-grid');
+            const resetBtn = document.getElementById('reset-btn');
+            const toast = document.getElementById('toast');
+
+            let selectedTarget = '친구';
+            let selectedTone = '정중함';
+            let uploadedFile = null;
+
+            // Chip Selection Handler
+            targetChips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    targetChips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    selectedTarget = chip.dataset.value;
+                });
+            });
+
+            toneChips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    toneChips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    selectedTone = chip.dataset.value;
+                });
+            });
+
+            // Drag and Drop File Handling
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+
+            function handleFile(file) {
+                if (!file.type.startsWith('image/')) {
+                    showToast('이미지 파일만 업로드할 수 있습니다.');
+                    return;
+                }
+                uploadedFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    uploadArea.style.display = 'none';
+                    filePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            removeFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                uploadedFile = null;
+                fileInput.value = '';
+                filePreview.style.display = 'none';
+                uploadArea.style.display = 'block';
+            });
+
+            // Submit Button Action
+            submitBtn.addEventListener('click', () => {
+                const text = situationText.value.trim();
+                
+                if (!text && !uploadedFile) {
+                    showToast('상황을 설명하는 글이나 카톡 캡처를 입력해주세요!');
+                    situationText.focus();
+                    return;
+                }
+
+                // Show Loading
+                actionContainer.style.display = 'none';
+                loadingArea.style.display = 'block';
+
+                // Scroll to loading area
+                loadingArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Simulate AI Generation
+                setTimeout(() => {
+                    loadingArea.style.display = 'none';
+                    generateExcuses(selectedTarget, selectedTone, text, uploadedFile);
+                    resultSection.style.display = 'flex';
+                    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 1800);
+            });
+
+            // Reset Button Action
+            resetBtn.addEventListener('click', () => {
+                resultSection.style.display = 'none';
+                actionContainer.style.display = 'block';
+                inputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // Generate Excuses Logic (Simulated smart responses)
+            function generateExcuses(target, tone, detail, hasFile) {
+                recommendationsGrid.innerHTML = '';
+
+                let templates = [];
+
+                if (target === '직장상사' || target === '거래처') {
+                    templates = [
+                        {
+                            tag: '정중 & 전문성 유지',
+                            tagClass: 'tag-polite',
+                            text: `팀장님(담당자님), 진심으로 죄송합니다. 오늘 일정 진행 중 갑작스러운 긴급 이슈(급한 가정사/갑작스러운 건강 난조)가 발생하여 어쩔 수 없이 일정을 변경해 드려야 할 것 같습니다.\n\n중요한 약속이었는데 차질을 드려 정말 죄송합니다. 괜찮으시다면 다음 주 [원하는 요일]에 맞춰 다시 준비하고 찾아뵙겠습니다. 너그럽게 양해해 주시면 감사하겠습니다.`,
+                            note: '💡 Point: 변명의 이유를 구체적으로 늘어놓기보다 사과와 대안(다음 일정 제안)을 즉시 제시하여 프로페셔널함을 유지합니다.'
+                        },
+                        {
+                            tag: '솔직 & 진정성 강조',
+                            tagClass: 'tag-empathy',
+                            text: `담당자님, 급하게 연락드리게 되어 정말 죄송합니다. 오늘 예상치 못한 긴급 상황이 겹쳐 약속 시간을 맞추기 어려울 것 같습니다.\n\n약속을 지키지 못해 너무 송구스럽습니다. 다음 일정 시에는 제가 직접 모시도록 하겠습니다. 미리 말씀드리지 못해 다시 한번 사과드립니다.`,
+                            note: '💡 Point: 자신의 책임감을 강조하며 상대방에게 불필요한 추측을 주지 않도록 명확하고 단정하게 사과합니다.'
+                        }
+                    ];
+                } else if (target === '연인') {
+                    templates = [
+                        {
+                            tag: '애교 & 미안함 극대화',
+                            tagClass: 'tag-humor',
+                            text: `자기야 진짜 진짜 미안해 😭 오늘 꼭 보고 싶었는데 갑자기 [돌발 상황/몸살 기운] 때문에 도저히 이동하기가 힘든 상태가 됐어..\n\n자기 얼굴 너무 보고 싶은데 오늘 가면 오히려 부담만 줄 것 같아서 너무 속상해.. 내가 진짜 맛있는 거 사줄 테니까 주말에 더 재미있게 데이트하자! 너무 미안해 내사랑 🥺❤️`,
+                            note: '💡 Point: 속상한 마음을 적극적으로 표현하고, 만남에 대한 의지가 컸음을 보여주어 서운함을 방지합니다.'
+                        },
+                        {
+                            tag: '진지 & 서운함 방지',
+                            tagClass: 'tag-polite',
+                            text: `오늘 같이 보내려고 기대 많이 했는데, 갑자기 급한 일(몸 상태 난조)이 생겨서 약속을 미뤄야 할 것 같아. 너무 갑작스럽게 말해서 정말 미안해.\n\n속상할 텐데 이해해 줘서 고마워. 컨디션 빨리 회복해서 제일 맛있는 거 먹으러 가자. 연락 바로 줄게!`,
+                            note: '💡 Point: 상대의 서운함을 먼저 알아채주고 확고한 대안 데이트 플랜을 언급합니다.'
+                        }
+                    ];
+                } else { // 친구 / 기타
+                    templates = [
+                        {
+                            tag: '위트 & 솔직함',
+                            tagClass: 'tag-humor',
+                            text: `아 진짜 미안하다 친구야.. 오늘 꼭 나가려고 했는데 몸 컨디션이 완전히 방전돼서 도저히 몸이 안 움직인다 😭\n\n괜히 나갔다가 민폐만 채울 것 같아서 급하게 연락해.. 오늘 모임 재미있게 놀고, 조만간 내가 풀코스로 맛있는 거 쏠 테니까 한 번만 봐주라!`,
+                            note: '💡 Point: 핑계보다는 솔직한 상태 전달과 함께 다음 만남에서의 확실한 보상(밥 쏘기 등)을 약속합니다.'
+                        },
+                        {
+                            tag: '정중 & 미안함 전달',
+                            tagClass: 'tag-polite',
+                            text: `OO아, 오랜만에 보는 약속인데 진짜 너무 미안해. 오늘 집안에 갑자기 급한 일이 생겨서 나가지 못할 것 같아.\n\n미리 약속 잡아둔 건데 차질 생기게 해서 마음이 너무 불편하네.. 나중에 시간 될 때 내가 맛있는 거 사줄 테니 조만간 다시 잡자! 진짜 미안!`,
+                            note: '💡 Point: 불피위한 약속 번복에 대한 미안함을 짧고 굵게 전달한 뒤, 상대방의 일정을 존중해 줍니다.'
+                        },
+                        {
+                            tag: '불쌍함 & 공감 유도',
+                            tagClass: 'tag-empathy',
+                            text: `나 오늘 진짜 가고 싶어서 아침부터 준비하고 있었는데.. 갑자기 급체(또는 몸살)가 와서 도저히 누워있지 않으면 안 되는 상황이야 😭\n\n오랜만에 얼굴 보는 날인데 이렇게 돼서 너무 속상하다.. 진짜 조만간 내가 연락해서 약속 다시 잡을게! 미안해!`,
+                            note: '💡 Point: 약속을 기대하고 준비했다는 정황을 언급하여 성의 없어서 취소하는 것이 아님을 보여줍니다.'
+                        }
+                    ];
+                }
+
+                if (hasFile) {
+                    // Inject screenshot context note
+                    templates.unshift({
+                        tag: '📸 카톡 캡처 분석 맞춤 추천',
+                        tagClass: 'tag-empathy',
+                        text: `(업로드하신 대화 텍스트 맥락 반영)\n\n"아이고.. 카톡 확인이 조금 늦었습니다! 이전 대화 내용 확인했는데, 말씀하신 부분 관련해서 제가 오해가 있었거나 확인이 미흡했던 것 같습니다.\n\n상황 빠르게 정돈해서 다시 정확한 내용 전달드리겠습니다. 매끄럽지 못하게 진행해 드려 죄송합니다!"`,
+                        note: '💡 AI 분석 결과: 업로드된 카카오톡 대화 내용의 뉘앙스를 반영하여, 상대방이 답답해하지 않도록 빠른 사과와 함께 정돈된 답변을 구성했습니다.'
+                    });
+                }
+
+                // Render Cards
+                templates.forEach((item, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'rec-card';
+                    card.innerHTML = `
+                        <span class="rec-tag ${item.tagClass}">${item.tag}</span>
+                        <div class="rec-text" id="excuse-text-${idx}">${escapeHtml(item.text)}</div>
+                        <div class="rec-explanation">${item.note}</div>
+                        <div class="rec-footer">
+                            <button class="btn-copy" onclick="copyToClipboard('excuse-text-${idx}')">
+                                <i class="fa-regular fa-copy"></i> 문구 복사하기
+                            </button>
+                        </div>
+                    `;
+                    recommendationsGrid.appendChild(card);
+                });
+            }
+
+            // Global Copy Helper
+            window.copyToClipboard = function(elementId) {
+                const text = document.getElementById(elementId).innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('클립보드에 텍스트가 복사되었습니다!');
+                }).catch(() => {
+                    showToast('복사에 실패했습니다.');
+                });
+            };
+
+            function showToast(message) {
+                const toastMsg = document.getElementById('toast-message');
+                toastMsg.innerText = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }
+
+            function escapeHtml(string) {
+                return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            }
+
+        });
+    </script>
+</body>
+</html>
+"""
+
+with open("nice_excuse.html", "w", encoding="utf-8") as f:
+    f.write(html_code)
+
+print("HTML generated successfully as nice_excuse.html")
