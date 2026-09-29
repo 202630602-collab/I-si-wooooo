@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>핑계의 정석 - 감성 맞춤 핑계 추천 서비스</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sage: {
+                            50: '#f4f7f4',
+                            100: '#e3ebe3',
+                            200: '#c7d7c7',
+                            300: '#a3be2',
+                            400: '#81a381',
+                            500: '#638863',
+                            600: '#4c6e4c',
+                            700: '#3c563c',
+                            800: '#324632',
+                            900: '#2a3a2a',
+                        },
+                        cream: '#faf8f5',
+                        warmSand: '#f0ebe1',
+                        kakaoYellow: '#FEE500',
+                        kakaoBg: '#BACEE0',
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-delayed': 'float 10s ease-in-out 3s infinite',
+                        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(3deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #faf8f5;
+            color: #2a3a2a;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(227, 235, 227, 0.8);
+        }
+        .glass-card-hover:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(99, 136, 99, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(76, 110, 76, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f4f7f4;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7d7c7;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #81a381;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between selection:bg-sage-200 selection:text-sage-900">
+
+    <!-- Ambient Organic Background Blobs -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-sage-200/50 rounded-full blur-3xl animate-float-slow"></div>
+        <div class="absolute top-1/3 -right-24 w-80 h-80 bg-warmSand/70 rounded-full blur-3xl animate-float-delayed"></div>
+        <div class="absolute -bottom-20 left-1/4 w-[30rem] h-[30rem] bg-sage-100/60 rounded-full blur-3xl animate-float-slow"></div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-10 max-w-4xl mx-auto w-full px-4 py-6 sm:py-10 flex-grow flex flex-col">
+
+        <!-- HEADER -->
+        <header class="text-center mb-8 sm:mb-12">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sage-100/80 text-sage-800 text-xs sm:text-sm font-medium mb-3 border border-sage-200">
+                <i class="fa-solid font-sharp fa-seedling text-sage-600"></i> 위기 극복 감성 솔루션
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-sage-900 mb-2">
+                핑계의 정석 <span class="text-sage-600 font-light">🌿</span>
+            </h1>
+            <p class="text-sage-700 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+                상대와의 관계, 상대의 감정선, 톡방 분위기까지 고려한<br class="hidden sm:inline"> 최적의 맞춤형 대처 핑계를 설계해 드립니다.
+            </p>
+        </header>
+
+        <!-- WIZARD STEP PROGRESS -->
+        <div class="mb-8 max-w-xl mx-auto w-full">
+            <div class="flex items-center justify-between relative">
+                <!-- Progress bar line background -->
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-sage-100 z-0 rounded-full"></div>
+                <!-- Progress bar active line -->
+                <div id="progress-bar-fill" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-sage-500 z-0 rounded-full transition-all duration-500" style="width: 0%;"></div>
+
+                <!-- Step Indicators -->
+                <div class="step-node relative z-10 flex flex-col items-center" data-step="1">
+                    <div class="step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-sage-600 text-white shadow-md">1</div>
+                    <span class="text-[11px] sm:text-xs mt-1.5 font-medium text-sage-800">관계 선택</span>
+                </div>
+                <div class="step-node relative z-10 flex flex-col items-center" data-step="2">
+                    <div class="step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-white text-sage-400 border-2 border-sage-200">2</div>
+                    <span class="text-[11px] sm:text-xs mt-1.5 font-medium text-sage-400">상황/감정</span>
+                </div>
+                <div class="step-node relative z-10 flex flex-col items-center" data-step="3">
+                    <div class="step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-white text-sage-400 border-2 border-sage-200">3</div>
+                    <span class="text-[11px] sm:text-xs mt-1.5 font-medium text-sage-400">카톡 분석</span>
+                </div>
+                <div class="step-node relative z-10 flex flex-col items-center" data-step="4">
+                    <div class="step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-white text-sage-400 border-2 border-sage-200">4</div>
+                    <span class="text-[11px] sm:text-xs mt-1.5 font-medium text-sage-400">핑계 처방</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN WIZARD CARD -->
+        <main class="glass-card rounded-2xl p-5 sm:p-8 shadow-xl mb-6 transition-all duration-300 flex-grow flex flex-col justify-between">
+            
+            <!-- STEP 1: RELATIONSHIP SELECT -->
+            <section id="step-1" class="step-content">
+                <div class="mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sage-900 mb-1">누구와의 상황인가요?</h2>
+                    <p class="text-xs sm:text-sm text-sage-600">대상과의 관계에 따라 적절한 예의와 어조가 결정됩니다.</p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+                    <button type="button" class="rel-btn p-4 rounded-xl border-2 border-sage-100 bg-white/60 text-left transition-all duration-200 hover:border-sage-300 glass-card-hover group flex flex-col justify-between h-32" data-value="boss">
+                        <div class="w-10 h-10 rounded-lg bg-sage-100 text-sage-700 flex items-center justify-center text-lg mb-2 group-hover:bg-sage-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sage-900 text-base">상사 / 직장 동료</div>
+                            <div class="text-[11px] text-sage-500">격식, 책임감, 정중함</div>
+                        </div>
+                    </button>
+
+                    <button type="button" class="rel-btn p-4 rounded-xl border-2 border-sage-100 bg-white/60 text-left transition-all duration-200 hover:border-sage-300 glass-card-hover group flex flex-col justify-between h-32" data-value="lover">
+                        <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-lg mb-2 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sage-900 text-base">연인 / 배우자</div>
+                            <div class="text-[11px] text-sage-500">공감, 애정, 솔직함</div>
+                        </div>
+                    </button>
+
+                    <button type="button" class="rel-btn p-4 rounded-xl border-2 border-sage-100 bg-white/60 text-left transition-all duration-200 hover:border-sage-300 glass-card-hover group flex flex-col justify-between h-32" data-value="friend">
+                        <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-2 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sage-900 text-base">친구 / 지인</div>
+                            <div class="text-[11px] text-sage-500">위트, 친근함, 쿨함</div>
+                        </div>
+                    </button>
+
+                    <button type="button" class="rel-btn p-4 rounded-xl border-2 border-sage-100 bg-white/60 text-left transition-all duration-200 hover:border-sage-300 glass-card-hover group flex flex-col justify-between h-32" data-value="professor">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-2 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sage-900 text-base">교수님 / 선생님</div>
+                            <div class="text-[11px] text-sage-500">극진한 예의, 불가항력</div>
+                        </div>
+                    </button>
+
+                    <button type="button" class="rel-btn p-4 rounded-xl border-2 border-sage-100 bg-white/60 text-left transition-all duration-200 hover:border-sage-300 glass-card-hover group flex flex-col justify-between h-32" data-value="family">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg mb-2 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-house-chimney"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sage-900 text-base">부모님 / 가족</div>
+                            <div class="text-[11px] text-sage-500">걱정 완화, 애교, 유연함</div>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- STEP 2: SITUATION & EMOTIONAL TEMPERATURE -->
+            <section id="step-2" class="step-content hidden">
+                <div class="mb-5">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sage-900 mb-1">어떤 실수를 저지르셨나요?</h2>
+                    <p class="text-xs sm:text-sm text-sage-600">내 실수 상황과 상대방의 감정 상태를 상세히 지정해주세요.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <!-- Situation Selection/Input -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-sage-700 mb-2">실수 유형 / 상황</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <button type="button" class="sit-tag-btn px-3 py-2 text-xs rounded-lg border border-sage-200 bg-white text-sage-700 font-medium hover:bg-sage-50 text-center transition-all" data-preset="약속 지각/펑크">⏰ 약속 지각 / 펑크</button>
+                            <button type="button" class="sit-tag-btn px-3 py-2 text-xs rounded-lg border border-sage-200 bg-white text-sage-700 font-medium hover:bg-sage-50 text-center transition-all" data-preset="업무/과제 제출 누락">📁 업무/과제 누락</button>
+                            <button type="button" class="sit-tag-btn px-3 py-2 text-xs rounded-lg border border-sage-200 bg-white text-sage-700 font-medium hover:bg-sage-50 text-center transition-all" data-preset="연락두절/읽씹/안읽씹">📱 연락두절 / 답장지연</button>
+                            <button type="button" class="sit-tag-btn px-3 py-2 text-xs rounded-lg border border-sage-200 bg-white text-sage-700 font-medium hover:bg-sage-50 text-center transition-all" data-preset="말실수/기분 상하게 함">💬 말실수 / 언쟁</button>
+                        </div>
+                        <input type="text" id="custom-situation" class="w-full px-4 py-2.5 rounded-xl border border-sage-200 bg-white/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sage-500 text-sm text-sage-900 placeholder-sage-400" placeholder="구체적인 상황을 입력하거나 위 태그를 클릭하세요 (예: 회의 준비 자료를 잊어버림)">
+                    </div>
+
+                    <!-- Emotion / Tone of Opponent -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-sage-700 mb-2">상대방의 현재 감정 상태</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <button type="button" class="emo-btn p-3 rounded-xl border-2 border-sage-100 bg-white text-center transition-all duration-200 hover:border-sage-300" data-value="furious">
+                                <div class="text-xl mb-1">🔥</div>
+                                <div class="font-bold text-xs text-sage-900">극대노 / 분노</div>
+                                <div class="text-[10px] text-sage-500">빠른 사과 필수</div>
+                            </button>
+
+                            <button type="button" class="emo-btn p-3 rounded-xl border-2 border-sage-100 bg-white text-center transition-all duration-200 hover:border-sage-300" data-value="cold">
+                                <div class="text-xl mb-1">❄️</div>
+                                <div class="font-bold text-xs text-sage-900">싸늘함 / 냉담</div>
+                                <div class="text-[10px] text-sage-500">논리적 단호함</div>
+                            </button>
+
+                            <button type="button" class="emo-btn p-3 rounded-xl border-2 border-sage-100 bg-white text-center transition-all duration-200 hover:border-sage-300" data-value="disappointed">
+                                <div class="text-xl mb-1">🌧️</div>
+                                <div class="font-bold text-xs text-sage-900">실망 / 서운함</div>
+                                <div class="text-[10px] text-sage-500">감성적 공감 필요</div>
+                            </button>
+
+                            <button type="button" class="emo-btn p-3 rounded-xl border-2 border-sage-100 bg-white text-center transition-all duration-200 hover:border-sage-300" data-value="sarcastic">
+                                <div class="text-xl mb-1">😏</div>
+                                <div class="font-bold text-xs text-sage-900">비꼼 / 어이없음</div>
+                                <div class="text-[10px] text-sage-500">재치있는 진정성</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 3: KAKAOTALK SCREENSHOT OR TEXT LOG (OPTIONAL) -->
+            <section id="step-3" class="step-content hidden">
+                <div class="mb-5">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl sm:text-2xl font-bold text-sage-900 mb-1">카톡 대화 분위기 분석 <span class="text-xs font-normal text-sage-500 bg-sage-100 px-2 py-0.5 rounded-full ml-1">선택사항</span></h2>
+                    </div>
+                    <p class="text-xs sm:text-sm text-sage-600">캡처 이미지나 대화 내용을 입력하면 더 정확한 맥락을 파악합니다.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <!-- Image Upload -->
+                    <div class="border-2 border-dashed border-sage-200 hover:border-sage-400 bg-white/40 rounded-xl p-4 text-center flex flex-col justify-center items-center cursor-pointer transition-colors relative" id="image-drop-zone">
+                        <input type="file" id="kakao-screenshot" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                        <div id="image-preview-container" class="hidden w-full flex flex-col items-center">
+                            <img id="image-preview" src="" alt="Screenshot preview" class="max-h-36 rounded-lg shadow-sm border border-sage-200 mb-2">
+                            <button type="button" id="remove-image-btn" class="text-xs text-rose-600 underline hover:text-rose-800">이미지 삭제</button>
+                        </div>
+                        <div id="image-upload-prompt" class="py-4">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-sage-400 mb-2"></i>
+                            <p class="text-xs font-semibold text-sage-800">카톡 캡처 이미지 올리기</p>
+                            <p class="text-[11px] text-sage-500 mt-1">드래그 & 드롭 또는 클릭하여 업로드</p>
+                        </div>
+                    </div>
+
+                    <!-- Text Chat Log -->
+                    <div class="flex flex-col">
+                        <textarea id="chat-text-log" class="w-full flex-grow h-36 p-3 rounded-xl border border-sage-200 bg-white/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sage-500 text-xs text-sage-900 placeholder-sage-400 resize-none" placeholder="오간 메시지 텍스트 복사/붙여넣기&#10;예시)&#10;상대: 지금 어디야? 벌써 30분 지났는데&#10;나: 미안해 거의 다 왔어&#10;상대: 매번 이러는 거 진짜 짜증나네"></textarea>
+                    </div>
+                </div>
+
+                <!-- API Key accordion / state banner -->
+                <div class="bg-sage-50 border border-sage-200 rounded-xl p-3 flex items-center justify-between text-xs">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sage-600"></i>
+                        <span class="text-sage-800 font-medium">AI 고도화 분석 모델 연동</span>
+                    </div>
+                    <button type="button" id="toggle-api-key-btn" class="text-sage-600 font-semibold underline hover:text-sage-800">Gemini 설정하기</button>
+                </div>
+                <div id="api-key-panel" class="hidden mt-2 p-3 bg-white/80 rounded-xl border border-sage-200 text-xs space-y-2">
+                    <p class="text-sage-600">Gemini API 키를 입력하면 시각적 캡처 이미지 직접 읽기 및 고도화 문맥 생성이 활성화됩니다. (미입력 시 고성능 자체 알고리즘 매트릭스로 즉시 생성)</p>
+                    <input type="password" id="gemini-api-key" placeholder="AI Studio API Key (Optional)" class="w-full px-3 py-1.5 border border-sage-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-sage-500">
+                </div>
+            </section>
+
+            <!-- STEP 4: RECOMMENDATIONS & RESULTS -->
+            <section id="step-4" class="step-content hidden">
+                <div class="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-sage-900 mb-0.5">맟춤형 핑계 처방전</h2>
+                        <p id="analysis-summary-badge" class="text-xs text-sage-600 font-medium"></p>
+                    </div>
+                    <button type="button" id="re-generate-btn" class="inline-flex items-center gap-1.5 text-xs bg-sage-100 hover:bg-sage-200 text-sage-800 font-semibold px-3 py-1.5 rounded-lg transition-colors self-start sm:self-auto">
+                        <i class="fa-solid fa-rotate-right"></i> 다시 추천받기
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-spinner" class="py-12 flex flex-col items-center justify-center space-y-3">
+                    <div class="w-10 h-10 border-4 border-sage-200 border-t-sage-600 rounded-full animate-spin"></div>
+                    <p class="text-sm font-medium text-sage-700 animate-pulse-subtle">관계의 온도와 최적의 명분을 계산하고 있습니다...</p>
+                </div>
+
+                <!-- Cards Grid Container -->
+                <div id="excuse-cards-container" class="hidden space-y-5 custom-scrollbar max-h-[500px] overflow-y-auto pr-1">
+                    <!-- Cards will be injected dynamically here -->
+                </div>
+            </section>
+
+            <!-- NAVIGATION BUTTONS -->
+            <div class="mt-8 pt-4 border-t border-sage-100 flex items-center justify-between">
+                <button type="button" id="prev-btn" class="px-5 py-2.5 rounded-xl border border-sage-200 bg-white text-sage-700 font-semibold text-sm hover:bg-sage-50 transition-all opacity-0 pointer-events-none">
+                    <i class="fa-solid fa-arrow-left mr-1.5"></i> 이전 Step
+                </button>
+
+                <button type="button" id="next-btn" class="px-6 py-2.5 rounded-xl bg-sage-600 text-white font-semibold text-sm hover:bg-sage-700 shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span>다음 단계</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-sage-500 py-2">
+            <p>© 2026 핑계의 정석. 센스 있는 위기 관리 매너 라이브러리.</p>
+        </footer>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-sage-900 text-white text-xs sm:text-sm font-medium px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">클립보드에 복사되었습니다!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // State Management
+        const state = {
+            currentStep: 1,
+            relationship: '',
+            situation: '',
+            emotion: '',
+            chatText: '',
+            imageDataUrl: '',
+            apiKey: '',
+            excuses: []
+        };
+
+        // UI DOM Elements
+        const stepContents = document.querySelectorAll('.step-content');
+        const stepNodes = document.querySelectorAll('.step-node');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Step 1: Relationship Selection
+        document.querySelectorAll('.rel-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.rel-btn').forEach(b => {
+                    b.classList.remove('border-sage-500', 'bg-sage-50', 'ring-2', 'ring-sage-400');
+                    b.classList.add('border-sage-100', 'bg-white/60');
+                });
+                btn.classList.remove('border-sage-100', 'bg-white/60');
+                btn.classList.add('border-sage-500', 'bg-sage-50', 'ring-2', 'ring-sage-400');
+                state.relationship = btn.dataset.value;
+                updateNextButtonState();
+            });
+        });
+
+        // Step 2: Situation Presets & Emotion
+        document.querySelectorAll('.sit-tag-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('custom-situation').value = btn.dataset.preset;
+                state.situation = btn.dataset.preset;
+                updateNextButtonState();
+            });
+        });
+
+        document.getElementById('custom-situation').addEventListener('input', (e) => {
+            state.situation = e.target.value.trim();
+            updateNextButtonState();
+        });
+
+        document.querySelectorAll('.emo-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.emo-btn').forEach(b => {
+                    b.classList.remove('border-sage-500', 'bg-sage-50', 'ring-2', 'ring-sage-400');
+                    b.classList.add('border-sage-100', 'bg-white');
+                });
+                btn.classList.remove('border-sage-100', 'bg-white');
+                btn.classList.add('border-sage-500', 'bg-sage-50', 'ring-2', 'ring-sage-400');
+                state.emotion = btn.dataset.value;
+                updateNextButtonState();
+            });
+        });
+
+        // Step 3: Kakao Screenshot & API Key toggle
+        const screenshotInput = document.getElementById('kakao-screenshot');
+        const imagePreview = document.getElementById('image-preview');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imageUploadPrompt = document.getElementById('image-upload-prompt');
+        const removeImageBtn = document.getElementById('remove-image-btn');
+
+        screenshotInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    state.imageDataUrl = event.target.result;
+                    imagePreview.src = state.imageDataUrl;
+                    imagePreviewContainer.classList.remove('hidden');
+                    imageUploadPrompt.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            screenshotInput.value = '';
+            state.imageDataUrl = '';
+            imagePreview.src = '';
+            imagePreviewContainer.classList.add('hidden');
+            imageUploadPrompt.classList.remove('hidden');
+        });
+
+        document.getElementById('chat-text-log').addEventListener('input', (e) => {
+            state.chatText = e.target.value.trim();
+        });
+
+        document.getElementById('toggle-api-key-btn').addEventListener('click', () => {
+            const panel = document.getElementById('api-key-panel');
+            panel.classList.toggle('hidden');
+        });
+
+        document.getElementById('gemini-api-key').addEventListener('input', (e) => {
+            state.apiKey = e.target.value.trim();
+        });
+
+        document.getElementById('re-generate-btn').addEventListener('click', () => {
+            generateExcuses();
+        });
+
+        // Navigation Controller
+        nextBtn.addEventListener('click', () => {
+            if (state.currentStep < 4) {
+                state.currentStep++;
+                updateWizardView();
+                if (state.currentStep === 4) {
+                    generateExcuses();
+                }
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (state.currentStep > 1) {
+                state.currentStep--;
+                updateWizardView();
+            }
+        });
+
+        function updateNextButtonState() {
+            let valid = false;
+            if (state.currentStep === 1) {
+                valid = !!state.relationship;
+            } else if (state.currentStep === 2) {
+                valid = !!state.situation && !!state.emotion;
+            } else if (state.currentStep === 3) {
+                valid = true; // Optional step
+            } else if (state.currentStep === 4) {
+                valid = true;
+            }
+            nextBtn.disabled = !valid;
+        }
+
+        function updateWizardView() {
+            // Update Step Content Visibility
+            stepContents.forEach((el, index) => {
+                if (index + 1 === state.currentStep) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // Update Progress Bar & Nodes
+            const progressPercent = ((state.currentStep - 1) / 3) * 100;
+            progressBarFill.style.width = `${progressPercent}%`;
+
+            stepNodes.forEach(node => {
+                const stepNum = parseInt(node.dataset.step);
+                const circle = node.querySelector('.step-circle');
+                const label = node.querySelector('span');
+
+                if (stepNum < state.currentStep) {
+                    circle.className = 'step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-sage-600 text-white';
+                    circle.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    label.className = 'text-[11px] sm:text-xs mt-1.5 font-medium text-sage-800';
+                } else if (stepNum === state.currentStep) {
+                    circle.className = 'step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-sage-600 text-white shadow-md ring-4 ring-sage-100';
+                    circle.innerHTML = stepNum;
+                    label.className = 'text-[11px] sm:text-xs mt-1.5 font-bold text-sage-900';
+                } else {
+                    circle.className = 'step-circle w-9 h-9 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 bg-white text-sage-400 border-2 border-sage-200';
+                    circle.innerHTML = stepNum;
+                    label.className = 'text-[11px] sm:text-xs mt-1.5 font-medium text-sage-400';
+                }
+            });
+
+            // Update Previous Button Opacity
+            if (state.currentStep > 1) {
+                prevBtn.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                prevBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+
+            // Update Next Button Text
+            if (state.currentStep === 3) {
+                nextBtn.innerHTML = '<span>처방전 생성하기</span> <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>';
+            } else if (state.currentStep === 4) {
+                nextBtn.innerHTML = '<span>완료</span> <i class="fa-solid fa-check text-xs"></i>';
+            } else {
+                nextBtn.innerHTML = '<span>다음 단계</span> <i class="fa-solid fa-arrow-right text-xs"></i>';
+            }
+
+            updateNextButtonState();
+        }
+
+        async function generateExcuses() {
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const cardsContainer = document.getElementById('excuse-cards-container');
+            const summaryBadge = document.getElementById('analysis-summary-badge');
+
+            loadingSpinner.classList.remove('hidden');
+            cardsContainer.classList.add('hidden');
+
+            const relNames = { boss: '상사/동료', lover: '연인/배우자', friend: '친구/지인', professor: '교수님', family: '가족' };
+            const emoNames = { furious: '극대노 🔥', cold: '싸늘함 ❄️', disappointed: '실망/서운 🌧️', sarcastic: '비꼼/어이없음 😏' };
+
+            summaryBadge.textContent = `[${relNames[state.relationship] || '대상'}] · [${emoNames[state.emotion] || '감정'}] · ${state.situation}`;
+
+            try {
+                if (state.apiKey) {
+                    state.excuses = await callGeminiApi();
+                } else {
+                    // Introduce smooth realistic delay for algorithmic generation
+                    await new Promise(r => setTimeout(r, 900));
+                    state.excuses = generateFallbackExcuses();
+                }
+            } catch (err) {
+                console.warn('Gemini API Error, falling back to local matrix:', err);
+                state.excuses = generateFallbackExcuses();
+            }
+
+            renderExcuseCards(state.excuses);
+
+            loadingSpinner.classList.add('hidden');
+            cardsContainer.classList.remove('hidden');
+        }
+
+        // Local Algorithmic Matrix Engine
+        function generateFallbackExcuses() {
+            const rel = state.relationship;
+            const emo = state.emotion;
+            const sit = state.situation;
+
+            // Tailored templates based on matrix combination
+            const templates = [
+                {
+                    type: '진심 어린 사과 & 책임감형',
+                    rate: emo === 'furious' ? 88 : 95,
+                    risk: '낮음',
+                    riskColor: 'text-emerald-600 bg-emerald-50 border-emerald-200',
+                    text: getSincereText(rel, sit, emo),
+                    recoveryTip: '핑계를 대는 대신 본인의 정직한 과실을 인정하고, 재발 방지 대책을 구체적 시각과 함께 제시하세요. 상대방의 화가 30% 감쇄됩니다.'
+                },
+                {
+                    type: '불가항력 외부변수형',
+                    rate: emo === 'cold' ? 82 : 90,
+                    risk: '보통',
+                    riskColor: 'text-amber-600 bg-amber-50 border-amber-200',
+                    text: getForceMajeureText(rel, sit, emo),
+                    recoveryTip: '갑작스러운 인터넷/교통/가족/급체 이슈 등 어쩔 수 없었던 상황임을 강조하세요. 증빙(사진 등)이 불필요한 현실적 사유여야 합니다.'
+                },
+                {
+                    type: '위트 & 감성 진정형',
+                    rate: rel === 'lover' || rel === 'friend' ? 92 : 75,
+                    risk: rel === 'boss' || rel === 'professor' ? '높음' : '보통',
+                    riskColor: rel === 'boss' || rel === 'professor' ? 'text-rose-600 bg-rose-50 border-rose-200' : 'text-amber-600 bg-amber-50 border-amber-200',
+                    text: getWittyText(rel, sit, emo),
+                    recoveryTip: '분위기를 지나치게 가볍지 않게 풀되, 상대의 기분을 맞춰주는 작은 보상(기프티콘/커피 선물 등)을 즉시 덧붙이면 효과가 극대화됩니다.'
+                },
+                {
+                    type: '정중한 격식 & 유연 대처형',
+                    rate: 89,
+                    risk: '매우 낮음',
+                    riskColor: 'text-emerald-600 bg-emerald-50 border-emerald-200',
+                    text: getPoliteText(rel, sit, emo),
+                    recoveryTip: '상대방의 일정을 최대한 배려하며 선택권을 넘기는 방식입니다. 상대가 거절하기 힘든 예의 바른 태도를 유지하세요.'
+                }
+            ];
+
+            return templates;
+        }
+
+        function getSincereText(rel, sit, emo) {
+            if (rel === 'boss') {
+                return `팀장님, 정말 죄송합니다. 말씀주신 [${sit}] 건과 관련하여 제 확인이 미흡했습니다. 변명의 여지없이 제 실수이며, 즉시 수정 및 보완하여 1시간 내로 정리본 다시 보고드리겠습니다. 심려를 끼쳐드려 다시 한번 사과드립니다.`;
+            } else if (rel === 'lover') {
+                return `OO아, 진짜 너무 미안해... [${sit}] 때문에 많이 속상하고 화났지? 내가 조금 더 신경 쓰고 미리 말했어야 했는데 정말 내 생각이 짧았어. 네 기분 상하게 해서 마음이 너무 안 좋다. 정말 미안해.`;
+            } else if (rel === 'professor') {
+                return `교수님, 안녕하십니까. [${sit}] 상황으로 인해 불편을 드려 진심으로 죄송합니다. 제 미숙함으로 발생한 일이며, 지적해주신 부분 깊이 반성하고 있습니다. 요청하신 과업은 금일 내로 완벽히 정돈하여 올려드리겠습니다.`;
+            } else if (rel === 'family') {
+                return `엄마/아빠, 진짜 미안해요! [${sit}] 건 내가 정신이 없어서 깜빡했어요. 바로 챙겨서 처리해 둘 테니까 너무 걱정 마세요. 다음부턴 꼭 메모해둘게요!`;
+            } else {
+                return `야 진짜 미안하다! 내가 [${sit}] 건으로 완전 신중하지 못했네. 너 화난 거 당연하고 내가 다 인정한다. 오늘 진짜 내가 맛있는 거 사면서 제대로 사과할게!`;
+            }
+        }
+
+        function getForceMajeureText(rel, sit, emo) {
+            if (rel === 'boss') {
+                return `팀장님, 죄송합니다. 이동 중 갑작스럽게 통신 장애 및 기기 오류가 발생하여 [${sit}] 관련 연락이 지연되었습니다. 현재 조치를 완료하였으며 즉시 조치 후 현황 보고드리겠습니다. 너른 양해 부탁드립니다.`;
+            } else if (rel === 'lover') {
+                return `OO아 진짜 갑자기 건물 전체에 인터넷이랑 데이터가 싹 먹통이 되어서 연락을 못 했어ㅠㅠ [${sit}] 때문에 안 그래도 답답했을 텐데 연락까지 안 돼서 얼마나 답답했을까.. 진짜 어쩔 수 없는 상황이었지만 너무 미안해!`;
+            } else if (rel === 'professor') {
+                return `교수님, 죄송합니다. 제출 시스템 접속 중 예상치 못한 서버 오류 및 파일 정합성 문제가 발생하여 [${sit}] 조치가 늦어졌습니다. 증빙 자료와 함께 신속히 재전송 올립니다.`;
+            } else {
+                return `아 진짜 레전드 악재 터졌다.. 갑자기 급체해서 정신을 못 차리고 있었어ㅠㅠ [${sit}] 건은 내가 몸 좀 수습하는 대로 바로 연락해서 처리해 줄게! 진짜 미안!`;
+            }
+        }
+
+        function getWittyText(rel, sit, emo) {
+            if (rel === 'lover') {
+                return `지금 너한테 너무 미안해서 고개 폭 숙이고 반성문 쓰는 중이야.. 🙇‍♂️ [${sit}] 진짜 내 머리를 쥐어박고 싶다. 화풀릴 때까지 맛있는 거 다 사줄 테니까 한번만 예쁘게 봐주면 안 될까..? 🥺❤️`;
+            } else if (rel === 'friend') {
+                return `내가 오늘 진짜 석고대죄한다.. 🙇‍♂️ [${sit}] 이건 내가 형벌 받아 마땅함. 대신 오늘 커스텀 커피+디저트 콤보 쏜다. 3초만 화 풀고 받아주라!!`;
+            } else {
+                return `정말 송구스럽습니다.. [${sit}] 건으로 인해 큰 누를 끼쳤습니다. 너그러운 마음으로 한 번만 품어주신다면 배로 노력하여 결과물로 보답하겠습니다! 🙇‍♂️`;
+            }
+        }
+
+        function getPoliteText(rel, sit, emo) {
+            return `안녕하십니까, [${sit}] 상황에 대해 사전에 미리 안내해 드리지 못해 정중히 양해를 구합니다. 변동 사항을 즉시 반영하여 차질이 없도록 마무리하겠으며, 편하신 시간에 말씀해 주시면 일정 재조율 도와드리겠습니다. 감사합니다.`;
+        }
+
+        // Gemini API Prompt Construction & Call
+        async function callGeminiApi() {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${state.apiKey}`;
+
+            const prompt = `
+Act as an expert interpersonal communication coach specializing in creating tailored excuses and crisis management responses.
+Analyze the user's situation and generate 4 high-quality excuse prescriptions.
+
+Context:
+- Relationship: ${state.relationship}
+- My Mistake/Situation: ${state.situation}
+- Opponent's Emotion: ${state.emotion}
+- Chat Text Log (if any): ${state.chatText || 'None'}
+
+Return ONLY a valid JSON array containing 4 objects with this exact structure:
+[
+  {
+    "type": "Excuse Strategy Name (e.g., 진심 어린 사과형)",
+    "rate": estimated success rate percentage (number 60-98),
+    "risk": "낮음" or "보통" or "높음",
+    "riskColor": "Tailwind color classes e.g. text-emerald-600 bg-emerald-50 border-emerald-200",
+    "text": "The exact KakaoTalk text message to send",
+    "recoveryTip": "Actionable post-excuse recovery tip in Korean"
+  }
+]
+Do not include any markdown backticks or extra text, just pure JSON array.
+`;
+
+            let contents = [];
+            if (state.imageDataUrl) {
+                const base64Data = state.imageDataUrl.split(',')[1];
+                const mimeType = state.imageDataUrl.split(';')[0].split(':')[1];
+                contents = [{
+                    parts: [
+                        { text: prompt },
+                        { inlineData: { mimeType: mimeType, data: base64Data } }
+                    ]
+                }];
+            } else {
+                contents = [{ parts: [{ text: prompt }] }];
+            }
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: contents })
+            });
+
+            const data = await res.json();
+            const rawText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, '').trim();
+            return JSON.parse(rawText);
+        }
+
+        function renderExcuseCards(excuses) {
+            const container = document.getElementById('excuse-cards-container');
+            container.innerHTML = '';
+
+            excuses.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl p-5 border border-sage-200 shadow-sm hover:shadow-md transition-all';
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-sage-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-sage-600 text-white font-bold text-xs flex items-center justify-center">${index + 1}</span>
+                            <h3 class="font-bold text-sage-900 text-sm sm:text-base">${item.type}</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] px-2.5 py-0.5 rounded-full border font-medium ${item.riskColor}">리스크 ${item.risk}</span>
+                            <span class="text-[11px] font-bold text-sage-700 bg-sage-100 px-2.5 py-0.5 rounded-full">성공률 ${item.rate}%</span>
+                        </div>
+                    </div>
+
+                    <!-- KAKAOTALK PREVIEW BUBBLE CONTAINER -->
+                    <div class="mb-4 bg-kakaoBg p-4 rounded-xl relative overflow-hidden">
+                        <div class="text-[10px] text-slate-600 font-medium mb-2 text-center">KakaoTalk 메시지 미리보기</div>
+                        <div class="flex justify-end">
+                            <div class="max-w-[85%] bg-kakaoYellow text-slate-900 text-xs sm:text-sm p-3 rounded-2xl rounded-tr-none shadow-sm relative leading-relaxed font-sans">
+                                ${escapeHtml(item.text)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTIONABLE RECOVERY TIP -->
+                    <div class="bg-sage-50/80 rounded-xl p-3 border border-sage-100 text-xs text-sage-800 mb-4 flex items-start gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5 text-sm"></i>
+                        <div>
+                            <strong class="font-semibold text-sage-900">후속 수습 팁:</strong> ${escapeHtml(item.recoveryTip)}
+                        </div>
+                    </div>
+
+                    <!-- COPY BUTTON -->
+                    <button type="button" onclick="copyToClipboard('${escapeJsString(item.text)}')" class="w-full py-2.5 bg-sage-100 hover:bg-sage-600 hover:text-white text-sage-800 font-bold text-xs sm:text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 group">
+                        <i class="fa-regular fa-copy group-hover:scale-110 transition-transform"></i>
+                        <span>이 핑계 메시지 복사하기</span>
+                    </button>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Helper Utility Functions
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('핑계 문구가 클립보드에 복사되었습니다!');
+            } catch (err) {
+                showToast('복사에 실패했습니다. 직접 드래그하여 복사해주세요.');
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/\n/g, "<br>");
+        }
+
+        function escapeJsString(str) {
+            return str
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
+                .replace(/\n/g, '\\n');
+        }
+
+        // Initialize state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateWizardView();
+        });
+    </script>
+</body>
+</html>
